@@ -2,6 +2,104 @@
 <html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>page.title</title>
+    <meta name='description' content='Calipse modern magazine theme for Jekyll'>
+    <link rel="canonical" href="index.html">
+    <link rel="alternate" type="application/rss+xml" title="Calipse" href="feed.xml">
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.5.0/dist/css/ionicons.min.css" rel="stylesheet">
+    <link href="https://imrznx.github.io/assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- begin header -->
+    <header class="header" id="top">
+        <div class="container-big">
+            <div class="row">
+                <div class="header__inner col col-12">
+                    <div class="logo">
+                        <a class="logo__link" href="index.html">MoviesKingdom </a>
+                    </div>
+                    <nav class="main-nav">
+                        <div class="main-nav__box">
+                            <div class="nav__icon-close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <div class="nav__title">Menu</div>
+                            <ul class="nav__list list-reset">
+                                <li class="nav__item">
+                                    <a href="index.html" class="nav__link active-link">Home</a>
+                                </li>
+                                <li class="nav__item"><a href="{{ site.url}}/c/bollywood/"
+                                        class="nav__link">Bollywood</a></li>
+                                <li class="nav__item"><a href="{{ site.url}}/c/hollywood/"
+                                        class="nav__link">Hollywood</a></li>
+                                <li class="nav__item dropdown">
+                                    <span class="nav__link dropdown-toggle">Pages <i
+                                            class="ion ion-ios-arrow-down arrow-down"></i></span>
+                                    <div class="dropdown-menu">
+                                        <a href="/c/bollywood/" class="nav__link">Bollywood</a>
+                                        <a href="/c/hollywood/" class="nav__link">Hollywood</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="nav-button">
+                        <i class="nav__icon icon__menu ion ion-md-menu"></i>
+                        <i class="nav__icon icon__search ion ion-md-search"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end search -->
+    <div class="site-cover">
+        <div class="site-cover__image">
+            <img class="lazy" data-src="https://calipse-dark.netlify.app/images/bg.jpg">
+        </div>
+    </div>
+    <!-- begin content -->
+    <main class="content" aria-label="Content">
+        <!-- begin hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero__inner">
+                    <h1 class="hero__title">page.title</h1>
+                </div>
+            </div>
+        </section>
+        <!-- end hero -->
+        <!-- begin featured post -->
+        <section class="f-post">
+            <div class="container">
+                <div id="main-div" class="row animate articles-container"></div>
+            </div>
+        </section>
+        <nav class="pagination animate">
+            <div class="container">
+                <div class="pagination__list" id="pagination"></div>
+            </div>
+        </nav>
+    </main>
+    <!-- end content -->
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="footer__inner">
+                        <div class="copyright">2023 &copy; <a href="">Movies Kingdom</a>. Crafted & Designed by <a
+                                href="">Rizwan Shaikh</a>.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script>
         // Function to generate pagination links
         function generatePagination(currentPage, totalPages) {
@@ -120,104 +218,6 @@
         generatePagination(pageParam, 1);
         fetchData(pageParam);
     </script>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>page.title</title>
-    <meta name='description' content='Calipse modern magazine theme for Jekyll'>
-    <link rel="canonical" href="index.html">
-    <link rel="alternate" type="application/rss+xml" title="Calipse" href="feed.xml">
-    <!-- Ionicons -->
-    <link href="https://unpkg.com/ionicons@4.5.0/dist/css/ionicons.min.css" rel="stylesheet">
-    <link href="https://imrznx.github.io/assets/style.css" rel="stylesheet">
-</head>
-
-<body>
-    <!-- begin header -->
-    <header class="header" id="top">
-        <div class="container-big">
-            <div class="row">
-                <div class="header__inner col col-12">
-                    <div class="logo">
-                        <a class="logo__link" href="index.html">MoviesKingdom </a>
-                    </div>
-                    <nav class="main-nav">
-                        <div class="main-nav__box">
-                            <div class="nav__icon-close">
-                                <i class="ion ion-md-close"></i>
-                            </div>
-                            <div class="nav__title">Menu</div>
-                            <ul class="nav__list list-reset">
-                                <li class="nav__item">
-                                    <a href="index.html" class="nav__link active-link">Home</a>
-                                </li>
-                                <li class="nav__item"><a href="{{ site.url}}/c/bollywood/"
-                                        class="nav__link">Bollywood</a></li>
-                                <li class="nav__item"><a href="{{ site.url}}/c/hollywood/"
-                                        class="nav__link">Hollywood</a></li>
-                                <li class="nav__item dropdown">
-                                    <span class="nav__link dropdown-toggle">Pages <i
-                                            class="ion ion-ios-arrow-down arrow-down"></i></span>
-                                    <div class="dropdown-menu">
-                                        <a href="/c/bollywood/" class="nav__link">Bollywood</a>
-                                        <a href="/c/hollywood/" class="nav__link">Hollywood</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                    <div class="nav-button">
-                        <i class="nav__icon icon__menu ion ion-md-menu"></i>
-                        <i class="nav__icon icon__search ion ion-md-search"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- end search -->
-    <div class="site-cover">
-        <div class="site-cover__image">
-            <img class="lazy" data-src="https://calipse-dark.netlify.app/images/bg.jpg">
-        </div>
-    </div>
-    <!-- begin content -->
-    <main class="content" aria-label="Content">
-        <!-- begin hero -->
-        <section class="hero">
-            <div class="container">
-                <div class="hero__inner">
-                    <h1 class="hero__title">page.title</h1>
-                </div>
-            </div>
-        </section>
-        <!-- end hero -->
-        <!-- begin featured post -->
-        <section class="f-post">
-            <div class="container">
-                <div id="main-div" class="row animate articles-container"></div>
-            </div>
-        </section>
-        <nav class="pagination animate">
-            <div class="container">
-                <div class="pagination__list" id="pagination"></div>
-            </div>
-        </nav>
-    </main>
-    <!-- end content -->
-    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
-    <!-- begin footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col col-12">
-                    <div class="footer__inner">
-                        <div class="copyright">2023 &copy; <a href="">Movies Kingdom</a>. Crafted & Designed by <a
-                                href="">Rizwan Shaikh</a>.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
     <script src="https://imrznx.github.io/assets/js/scripts.js"></script>
 </body>
 
