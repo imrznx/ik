@@ -2,6 +2,124 @@
 <html lang="en">
 
 <head>
+    <script>
+        // Function to generate pagination links
+        function generatePagination(currentPage, totalPages) {
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+    
+            let range;
+            if (window.innerWidth > 886) {
+                range = 5;
+            } else if (window.innerWidth <= 886 && window.innerWidth > 656) {
+                range = 4;
+            } else {
+                range = 2;
+            }
+    
+            const startPage = Math.max(1, currentPage - range);
+            const endPage = Math.min(totalPages, startPage + 2 * range);
+    
+            if (currentPage > 1) {
+                addPageLink(paginationDiv, 1, `<i class="ion ion-ios-arrow-back"></i><i class="ion ion-ios-arrow-back"></i>`);
+                addPageLink(paginationDiv, currentPage - 1, `<i class="ion ion-ios-arrow-back"></i>`);
+            }
+    
+            for (let i = startPage; i <= endPage; i++) {
+                if (i === currentPage) {
+                    addPageLink(paginationDiv, i, i, 'active-link');
+                } else {
+                    addPageLink(paginationDiv, i, i, 'mdn');
+                }
+            }
+    
+            if (currentPage < totalPages) {
+                addPageLink(paginationDiv, currentPage + 1, `<i class="ion ion-ios-arrow-forward"></i>`);
+                addPageLink(paginationDiv, totalPages, `<i class="ion ion-ios-arrow-forward"></i><i class="ion ion-ios-arrow-forward"></i>`);
+            }
+    
+        }
+    
+        function addPageLink(container, page, content, className = '') {
+            const pageLink = document.createElement('a');
+            pageLink.className = `count-number ${className}`;
+            pageLink.href = `javascript:void(0);`;
+            pageLink.addEventListener('click', () => fetchData(page));
+            pageLink.innerHTML = content;
+            container.appendChild(pageLink);
+        }
+    
+        async function fetchData(page) {
+            try {
+                const response = await fetch('new.json');
+                const responseData = await response.json();
+    
+                const totalPages = responseData[0];
+    
+                if (page >= 1 && page <= totalPages) {
+                    const currentPageData = responseData[page];
+    
+                    const mainDiv = document.getElementById('main-div');
+                    mainDiv.innerHTML = '';
+    
+                    currentPageData.forEach(item => {
+                        const articleDiv = document.createElement('div');
+                        articleDiv.className = 'article col col-2 col-m-6 col-d-3';
+                        articleDiv.innerHTML = `
+                            <div class="inner">
+                                <span class="f-post">${item[3]}</span>
+                                <a class="a_image" href="${item[0].toLowerCase().split(' ').join('-')}">
+                                    <img src="${item[2]}">
+                                    <div class="overlay"></div>
+                                </a>
+                                <div class="a_content">
+                                    <h2 class="a_title">
+                                        <a href="${item[0].toLowerCase().split(' ').join('-')}">${item[0]}</a>
+                                    </h2>
+                                </div>
+                            </div>
+                        `;
+                        mainDiv.appendChild(articleDiv);
+                    });
+    
+                    window.history.pushState({}, '', `?p=${page}`);
+                    window.scrollTo(0, 0);
+                } else {
+                    console.error('Invalid page number:', page);
+                }
+    
+                // Call generatePagination after fetchData to ensure correct pagination
+                generatePagination(page, totalPages);
+                setActivePageOnLoad();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    
+        function setActivePageOnLoad() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentPage = parseInt(urlParams.get('p')) || 1;
+    
+            const paginationLinks = document.querySelectorAll('#pagination .count-number');
+            paginationLinks.forEach(link => {
+                const pageNumber = parseInt(link.textContent);
+                if (pageNumber === currentPage) {
+                    link.classList.add('active-link');
+                    link.classList.remove('mdn');
+                }
+            });
+        }
+    
+        const urlParams = new URLSearchParams(window.location.search);
+        let pageParam = urlParams.get('p');
+    
+        if (!pageParam || isNaN(pageParam)) {
+            pageParam = 1;
+        }
+    
+        generatePagination(pageParam, 1);
+        fetchData(pageParam);
+    </script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,140 +218,6 @@
             </div>
         </div>
     </footer>
-    <script>
-        // Function to generate pagination links
-        function generatePagination(currentPage, totalPages) {
-            const paginationDiv = document.getElementById('pagination');
-            paginationDiv.innerHTML = '';
-    
-            let range;
-            if (window.innerWidth > 1024) {
-                range = 9;
-            } else if (window.innerWidth <= 1024 && window.innerWidth > 886) {
-                range = 7;
-            } else if (window.innerWidth <= 886 && window.innerWidth > 656) {
-                range = 5;
-            } else {
-                range = 3;
-            }
-    
-            // Adjust range based on total pages
-            range = Math.min(range, totalPages);
-    
-            // Add link to go to the first page
-            addPageLink(paginationDiv, 1, `<i class="ion ion-ios-arrow-back"></i><i class="ion ion-ios-arrow-back"></i>`);
-    
-            if (currentPage > 1) {
-                addPageLink(paginationDiv, currentPage - 1, `<i class="ion ion-ios-arrow-back"></i>`);
-            }
-    
-            const startRange = Math.max(1, currentPage - Math.floor(range / 2));
-            const endRange = Math.min(totalPages, startRange + range - 1);
-    
-            for (let i = startRange; i <= endRange; i++) {
-                if (i === currentPage) {
-                    addPageLink(paginationDiv, i, i, 'active-link');
-                } else {
-                    addPageLink(paginationDiv, i, i, 'mdn');
-                }
-            }
-    
-            if (currentPage < totalPages) {
-                addPageLink(paginationDiv, currentPage + 1, `<i class="ion ion-ios-arrow-forward"></i>`);
-            }
-    
-            // Add link to go to the last page
-            addPageLink(paginationDiv, totalPages, `<i class="ion ion-ios-arrow-forward"></i><i class="ion ion-ios-arrow-forward"></i>`);
-        }
-    
-        function addPageLink(container, page, content, className = '') {
-            const pageLink = document.createElement('a');
-            pageLink.className = `count-number ${className}`;
-            pageLink.href = `javascript:void(0);`;
-            pageLink.addEventListener('click', () => fetchData(page));
-            pageLink.innerHTML = content;
-            container.appendChild(pageLink);
-        }
-    
-        function setActivePageOnLoad() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const currentPage = parseInt(urlParams.get('p')) || 1;
-    
-            const paginationLinks = document.querySelectorAll('#pagination .count-number');
-            paginationLinks.forEach(link => {
-                const pageNumber = parseInt(link.textContent);
-                if (pageNumber === currentPage) {
-                    link.classList.add('active-link');
-                    link.classList.remove('mdn');
-                }
-            });
-        }
-    
-        let jsonData; // Variable to store the fetched JSON data
-    
-        async function fetchData(page) {
-            try {
-                if (!jsonData) {
-                    // Fetch the entire data.json file if not already fetched
-                    const response = await fetch('/data.json');
-                    jsonData = await response.json();
-                }
-    
-                const totalItems = jsonData.length;
-                const itemsPerPage = 24;
-                const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
-                const startIndex = (page - 1) * itemsPerPage;
-                const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-                const items = jsonData.slice(startIndex, endIndex);
-    
-                const mainDiv = document.getElementById('main-div');
-                mainDiv.innerHTML = '';
-    
-                items.forEach(item => {
-                    const articleDiv = document.createElement('div');
-                    articleDiv.className = 'article col col-2 col-m-6 col-d-3';
-                    articleDiv.innerHTML = `
-                            <div class="inner">
-                                <span class="f-post">${item[3]}</span>
-                                <a class="a_image" href="${item[0].toLowerCase().split(' ').join('-')}">
-                                    <img src="${item[2]}">
-                                    <div class="overlay"></div>
-                                </a>
-                                <div class="a_content">
-                                    <h2 class="a_title">
-                                        <a href="${item[0].toLowerCase().split(' ').join('-')}">${item[0]}</a>
-                                    </h2>
-                                </div>
-                            </div>
-                        `;
-                    mainDiv.appendChild(articleDiv);
-                });
-    
-                window.history.pushState({}, '', `?p=${page}`);
-    
-                window.scrollTo(0, 0);
-    
-                // After fetching data, generate paginations
-                generatePagination(page, totalPages);
-    
-                // Set active class on the current page on load
-                setActivePageOnLoad();
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-    
-        const urlParams = new URLSearchParams(window.location.search);
-        let pageParam = urlParams.get('p');
-    
-        if (!pageParam || isNaN(pageParam)) {
-            pageParam = 1;
-        }
-    
-        fetchData(pageParam);
-    </script>
-    
     <script src="https://imrznx.github.io/assets/js/scripts.js"></script>
 </body>
 
