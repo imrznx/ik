@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index,follow">
+    <meta http-equiv="content-language" content="en">
+    <title>MoviesWRLD</title>
+    <meta property="og:description" content="MoviesWRLD">
+    <meta property="og:site_name" content="MoviesWRLD" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="theme-color" content="#7F39E7">
+    <link rel="stylesheet" href="nxt.css">
+</head>
+
+<body>
+    <header style="position: relative;top: 0px;">
+        <div class="container">
+            <div class="header-logo">
+                <a title="MoviesWRLD" href="MoviesWRLD" id="logo"></a>
+            </div>
+            <div class="mobile-menu" style="padding-right: 4px;"><i class="gg-menu-left-alt"></i></div>
+            <div class="mobile-search"><i class="gg-search"></i></div>
+            <div id="menu">
+                <ul id="menu-movies" class="top-menu">
+                    <li><a href="https://ww8.mkvanime.com/" target="_blank">Anime</a></li>
+                    <li><a title="Bollywood" href="https://mkvcinemas.zip/bollywood-movies-list/">Bollywood</a>
+                        <div class="sub-container" style="display: none;">
+                            <ul class="sub-menu">
+                                <li><a href="">Latest</a></li>
+                                <li><a href="">A-Z List</a></li>
+                                <li><a href="">Year Wise</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a title="Hollywood" href="">Hollywood</a>
+                        <div class="sub-container" style="display: none;">
+                            <ul class="sub-menu">
+                                <li><a href="">Latest</a></li>
+                                <li><a href="">A-Z List</a></li>
+                                <li><a href="">Year Wise</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a title="Category" href="">Category</a>
+                        <div class="sub-container" style="display: none;">
+                            <ul class="sub-menu">
+                                <li><a href="">TV Web Series</a></li>
+                                <li><a href="">Dual audio</a></li>
+                                <li><a href="">Hindi</a></li>
+                                <li><a href="">Old Movies</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a title="Genre" href="">Genre</a>
+                        <div class="sub-container" style="display: none;">
+                            <ul class="sub-menu">
+                                <li><a href="">Action</a></li>
+                                <li><a href="">Adventure</a></li>
+                                <li><a href="">Animation</a></li>
+                                <li><a href="">Biography</a></li>
+                                <li><a href="">Bold</a></li>
+                                <li><a href="">Comedy</a></li>
+                                <li><a href="">Cookery</a></li>
+                                <li><a href="">Crime</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="" target="_blank">Top IMDb</a></li>
+                    <li><a href="" target="_blank">Discord</a></li>
+                </ul>
+            </div>
+            <div id="search">
+                <div class="search-content">
+                    <form method="get" id="searchform" action="">
+                        <input class="form-control search-input" type="text" id="searchBox" placeholder="Search.."
+                            id="q" name="q">
+                        <button type="submit"><i class="gg-search" style="color: #7F39E7;"></i></button>
+                    </form>
+                    <div class="search-suggest searchwp-live-search-results"
+                        style="left: 978.5px; top: 56px; width: 215px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="content" aria-label="Content">
+        <section class="hero">
+            <div class="container">
+                <div class="hero__inner">
+                    <h1 class="hero__title" id="heroTitle">All from MoviesWRLD</h1>
+                    <p id="s-count"></p>
+                </div>
+            </div>
+        </section>
+        <section class="f-post">
+            <div class="container">
+                <div style="display: flex; justify-content: center;">
+                    <div id="spinner" class="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div id="main-div" class="row animate articles-container"></div>
+            </div>
+        </section>
+        <nav class="pagination animate">
+            <div class="container">
+                <div class="pagination__list" id="pagination"></div>
+            </div>
+        </nav>
+    </main>
+    <script>
+        const searchInput = document.getElementById('q');
+        const xx = new URLSearchParams(window.location.search);
+        const q = xx.get('q');
+        if (q !== null && q !== '') {
+            document.getElementById('searchBox').value = q;
+            document.getElementById('heroTitle').innerHTML = `'${q}'`;
+        } else {
+            document.getElementById('heroTitle').innerHTML = 'All from MoviesWRLD';
+        }
+
+
+        function generatePagination(currentPage, totalPages) {
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+
+            if (totalPages <= 1) {
+                const homeButton = document.createElement('a');
+                homeButton.className = 'sbtn';
+                homeButton.href = '/';
+                homeButton.textContent = 'Go to Home';
+                paginationDiv.appendChild(homeButton);
+                return;
+            }
+
+
+            let range;
+            if (window.innerWidth > 1024) {
+                range = 5;
+            } else if (window.innerWidth <= 1024 && window.innerWidth > 886) {
+                range = 4;
+            } else if (window.innerWidth <= 886 && window.innerWidth > 656) {
+                range = 3;
+            } else if (window.innerWidth <= 656 && window.innerWidth > 348) {
+                range = 2;
+            } else {
+                range = 1;
+            }
+
+            if (currentPage > 1) {
+                addPageLink(paginationDiv, 1, `<i class="gg-arrow-left"></i>`);
+            }
+
+            for (let i = Math.max(1, currentPage - range); i <= Math.min(totalPages, currentPage + range); i++) {
+                if (i === currentPage) {
+                    addPageLink(paginationDiv, i, i, 'active-link');
+                } else {
+                    addPageLink(paginationDiv, i, i, 'mdn');
+                }
+            }
+
+            if (currentPage < totalPages) {
+                addPageLink(paginationDiv, totalPages, `<i class="gg-arrow-right"></i>`);
+            }
+        }
+
+        function addPageLink(container, page, content, className = '') {
+            const pageLink = document.createElement('a');
+            pageLink.className = `count-number ${className}`;
+            pageLink.addEventListener('click', () => fetchData(page));
+            pageLink.innerHTML = content;
+            container.appendChild(pageLink);
+        }
+
+        let data;
+
+        async function fetchData(page) {
+            const spinner = document.getElementById('spinner');
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch('all.json');
+                data = await response.json();
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = urlParams.get('q');
+                const itemsPerPage = 30;
+
+                let filteredData = data;
+
+                if (searchQuery && searchQuery.length >= 1) {
+                    // Filter data based on the search query
+                    filteredData = data.filter(item =>
+                        [item[0], item[2], item[4], item[5], item[6]].some(prop => {
+                            if (typeof prop === 'string') {
+                                return prop.toLowerCase().includes(searchQuery.toLowerCase());
+                            } else if (Array.isArray(prop)) {
+                                return prop.some(innerProp => innerProp.toLowerCase().includes(searchQuery.toLowerCase()));
+                            }
+                            return false;
+                        })
+                    );
+
+                }
+                const totalResults = filteredData.length;
+                const countElement = document.getElementById('s-count');
+                let formattedText;
+                if (totalResults > 1) {
+                    formattedText = `${totalResults} results found`;
+                } else {
+                    formattedText = `${totalResults} result found`;
+                }
+                countElement.textContent = formattedText;
+
+                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+
+                const items = filteredData.slice(startIndex, endIndex);
+
+                const mainDiv = document.getElementById('main-div');
+                mainDiv.innerHTML = '';
+
+                items.forEach(item => {
+                    const articleDiv = document.createElement('div');
+                    articleDiv.className = 'article col col-2 col-m-6 col-d-3';
+                    articleDiv.innerHTML = `
+                    <div class="inner">
+                        <span class="f-post">${item[2]}</span>
+                        <a class="a_image" href="${item[0].toLowerCase().split(' ').join('-')}">
+                            <img src="${item[1]}">
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="a_content">
+                            <h2 class="a_title">
+                                <a href="${item[0].toLowerCase().split(' ').join('-')}">${item[0]}</a>
+                            </h2>
+                        </div>
+                    </div>
+                `;
+                    mainDiv.appendChild(articleDiv);
+                });
+
+                // Preserve existing query parameters
+                if (searchQuery) {
+                    urlParams.set('q', searchQuery);
+                }
+
+                urlParams.set('p', page);
+                window.history.pushState({}, '', `?${urlParams.toString()}`);
+
+                window.scrollTo(0, 0);
+
+                generatePagination(page, totalPages);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                spinner.style.display = 'none';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let pageParam = urlParams.get('p');
+
+        if (!pageParam || isNaN(pageParam)) {
+            pageParam = 1;
+        } else {
+            pageParam = Number(pageParam);
+        }
+
+        fetchData(pageParam);
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function a() {
+                this.querySelector(".sub-container").style.display = "block";
+            }
+
+            function b() {
+                this.querySelector(".sub-container").style.display = "none";
+            }
+
+            var boxTitle = document.querySelector("#search a.box-title");
+            var mobileMenu = document.querySelector(".mobile-menu");
+            var mobileSearch = document.querySelector(".mobile-search");
+            var filterToggle = document.querySelector(".filter-toggle");
+            var bpBtnLight = document.querySelector(".bp-btn-light");
+            var overlay = document.querySelector("#overlay");
+            var bpBtnAuto = document.querySelector(".bp-btn-auto");
+            var toggle = document.querySelector("#toggle");
+            var cacClose = document.querySelector(".cac-close");
+            var topMenuItems = document.querySelectorAll(".top-menu > li");
+
+            if (boxTitle) {
+                boxTitle.addEventListener("click", function () {
+                    document.querySelector("#search .box").classList.toggle("active");
+                });
+            }
+
+            if (mobileMenu) {
+                mobileMenu.addEventListener("click", function () {
+                    document.querySelector("#menu").classList.toggle("active");
+                    mobileMenu.classList.toggle("active");
+                    document.querySelector("#search").classList.remove("active");
+                    document.querySelector(".mobile-search").classList.remove("active");
+                });
+            }
+
+            if (mobileSearch) {
+                mobileSearch.addEventListener("click", function () {
+                    document.querySelector("#search").classList.toggle("active");
+                    mobileSearch.classList.toggle("active");
+                    document.querySelector("#menu").classList.remove("active");
+                    document.querySelector(".mobile-menu").classList.remove("active");
+                });
+            }
+
+            if (filterToggle) {
+                filterToggle.addEventListener("click", function () {
+                    document.querySelector("#filter").classList.toggle("active");
+                    filterToggle.classList.toggle("active");
+                });
+            }
+
+            if (bpBtnLight) {
+                bpBtnLight.addEventListener("click", function () {
+                    document.querySelector(".bp-btn-light").classList.toggle("active");
+                    document.querySelector("#overlay").classList.toggle("active");
+                    document.querySelector("#media-player").classList.toggle("active");
+                    document.querySelector("#content-embed").classList.toggle("active");
+                    document.querySelector("#comment-area").classList.toggle("active");
+                });
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", function () {
+                    document.querySelector(".bp-btn-light").classList.remove("active");
+                    document.querySelector("#overlay").classList.remove("active");
+                    document.querySelector("#media-player").classList.remove("active");
+                    document.querySelector("#content-embed").classList.remove("active");
+                    document.querySelector("#comment-area").classList.remove("active");
+                });
+            }
+
+            if (bpBtnAuto) {
+                bpBtnAuto.addEventListener("click", function () {
+                    document.querySelector(".bp-btn-auto").classList.toggle("active");
+                });
+            }
+
+            if (toggle) {
+                toggle.addEventListener("click", function () {
+                    document.querySelector("#comment").classList.toggle("active");
+                });
+            }
+
+            if (cacClose) {
+                cacClose.addEventListener("click", function () {
+                    document.querySelector("#comment").classList.toggle("active");
+                });
+            }
+
+            for (var i = 0; i < topMenuItems.length; i++) {
+                topMenuItems[i].addEventListener("mouseover", a);
+                topMenuItems[i].addEventListener("mouseout", b);
+            }
+
+            var c = 0;
+            window.addEventListener("scroll", function () {
+                if (window.pageYOffset < c) {
+                    if (document.querySelector("header").style.position !== "fixed") {
+                        document.querySelector("header").style.position = "fixed";
+                        document.querySelector("header").style.top = -document.querySelector("header").offsetHeight + "px";
+                        document.querySelector("header").style.backgroundColor = "#fff";
+                        document.querySelector("header").style.top = "0px";
+                        document.querySelector("#main").style.paddingTop = document.querySelector("header").offsetHeight + "px";
+                    }
+                } else {
+                    document.querySelector("header").style.position = "relative";
+                    document.querySelector("header").style.top = "0px";
+                    document.querySelector("#main").style.paddingTop = "0px";
+                }
+                c = window.pageYOffset;
+            });
+        });
+    </script>
+    <footer class="footer">
+        <div class="ftr" style="position: absolute; bottom: -150px; width: 100%;">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-12">
+                        <div class="footer__inner">
+                            <div class="copyright">2023 © <a href="">MoviesWRLD</a>. Crafted &amp; Designed by <a
+                                    href="">Rizwan Shaikh</a>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
